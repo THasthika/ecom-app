@@ -1,7 +1,7 @@
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 dotenv.config();
 
-const config = require("./config");
+const config = require('./config');
 
 const dbConfig = {
   development: {
@@ -10,7 +10,7 @@ const dbConfig = {
     database: config.DB_NAME,
     host: config.DB_HOST,
     port: config.DB_PORT,
-    dialect: "postgres",
+    dialect: 'postgres',
   },
   test: {
     username: config.DB_USER,
@@ -18,7 +18,7 @@ const dbConfig = {
     database: config.DB_NAME,
     host: config.DB_HOST,
     port: config.DB_PORT,
-    dialect: "postgres",
+    dialect: 'postgres',
   },
   production: {
     username: config.DB_USER,
@@ -26,7 +26,7 @@ const dbConfig = {
     database: config.DB_NAME,
     host: config.DB_HOST,
     port: config.DB_PORT,
-    dialect: "postgres",
+    dialect: 'postgres',
   },
 };
 
