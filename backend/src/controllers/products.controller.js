@@ -1,5 +1,5 @@
 const express = require('express');
-const { body, param } = require('express-validator');
+const { body, param, query } = require('express-validator');
 const { controllerWrapper } = require('../utils');
 const validatorMiddleware = require('../middlewares/validator.middleware');
 
@@ -47,6 +47,33 @@ function makeProductsController({ productsService }) {
     validatorMiddleware,
     controllerWrapper(async (req, res) => {
       return await productsService.deleteProduct(req.params.id);
+    }),
+  );
+
+  router.get(
+    '/query',
+    query('q').isString().optional(),
+    query('minPrice').isInt().optional(),
+    query('maxPrice').isInt().optional(),
+    query('minQuantity').isInt().optional(),
+    query('sortBy')
+      .isIn(['title', 'price', 'createdAt', 'updatedAt'])
+      .optional(),
+    query('sortDir').isIn(['ASC', 'DESC']).optional(),
+    query('limit').isInt().optional(),
+    query('offset').isInt().optional(),
+    validatorMiddleware,
+    controllerWrapper(async (req, res) => {
+      return await productsService.queryProducts({
+        q: req.query.q,
+        minPrice: req.query.minPrice,
+        maxPrice: req.query.maxPrice,
+        minQuantity: req.query.minQuantity,
+        sortBy: req.query.sortBy,
+        sortDir: req.query.sortDir,
+        limit: req.query.limit,
+        offset: req.query.offset,
+      });
     }),
   );
 

@@ -1,4 +1,5 @@
 const Product = require('../models').Product;
+const { Op } = require('sequelize');
 const {
   HttpException,
   InternalServerException,
@@ -76,12 +77,63 @@ function makeProductsService({}) {
     return await Product.findAll();
   }
 
+  async function queryProducts(
+    dto = {
+      q,
+      minPrice,
+      maxPrice,
+      minQuantity,
+      sortBy,
+      sortDir,
+      limit,
+      offset,
+    },
+  ) {
+    const where = {};
+
+    if (!!dto.q) {
+      // make q object
+      const qObj = {
+        [Op.iLike]: `%${dto.q}%`,
+      };
+      where.title = qObj;
+      where.description = qObj;
+    }
+
+    const wherePrice = {};
+
+    if (!!dto.minPrice) {
+      wherePrice[Op.gte] = dto.minPrice;
+      where.price = wherePrice;
+    }
+    if (!!dto.maxPrice) {
+      wherePrice[Op.lte] = dto.maxPrice;
+      where.price = wherePrice;
+    }
+    if (!!dto.minQuantity) {
+      where.quantity = {
+        [Op.gte]: dto.minQuantity,
+      };
+    }
+
+    // limits
+    const limit = dto.limit || 10;
+    const offset = dto.offset || 0;
+
+    return await Product.findAll({
+      where: where,
+      limit: limit,
+      offset: offset,
+    });
+  }
+
   return {
     createProduct,
     updateProduct,
     deleteProduct,
     getProductById,
     getAllProducts,
+    queryProducts,
   };
 }
 
