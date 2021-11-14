@@ -1,9 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
   const ProductImage = sequelize.define('ProductImage', {
-    productId: DataTypes.INTEGER,
-    name: DataTypes.STRING,
+    productId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     extension: DataTypes.STRING,
-    rank: DataTypes.INTEGER,
+    rank: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+    },
   });
 
   ProductImage.associate = (models) => {

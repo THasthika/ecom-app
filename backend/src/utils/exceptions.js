@@ -17,6 +17,12 @@ class InternalServerException extends HttpException {
   }
 }
 
+class BadRequestException extends HttpException {
+  constructor(message = 'Bad Request') {
+    super(400, message);
+  }
+}
+
 module.exports = {
   HttpException,
   NotFoundException,

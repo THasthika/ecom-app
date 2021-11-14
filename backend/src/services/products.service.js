@@ -1,12 +1,36 @@
-const Product = require('../models').Product;
+const { Product, ProductImage, sequelize } = require('../models');
+
 const { Op } = require('sequelize');
 const {
   HttpException,
   InternalServerException,
   NotFoundException,
 } = require('../utils/exceptions');
+const config = require('../config');
 
-function makeProductsService({}) {
+const productImagePrefix = 'product_';
+
+class ProductNotFoundException extends NotFoundException {
+  constructor() {
+    super('Product Not Found');
+  }
+}
+
+function makeProductsService({
+  moveFile,
+  removeFile,
+  randomAlphabeticString,
+  getFileExtension,
+  joinPath,
+}) {
+  function getProductImagePath(name, ext) {
+    return joinPath(
+      config.APP_ROOT,
+      config.APP_IMAGE_DIR,
+      `${productImagePrefix}${name}.${ext}`,
+    );
+  }
+
   function createProduct(
     dto = { title, description, price, quantity },
   ) {
@@ -40,7 +64,7 @@ function makeProductsService({}) {
       const product = await Product.findOne({ where: { id: id } });
       return product;
     } else if (rows == 0) {
-      throw new NotFoundException('Product Not Found');
+      throw new ProductNotFoundException();
     } else {
       throw new InternalServerException();
     }
@@ -49,7 +73,7 @@ function makeProductsService({}) {
   async function deleteProduct(id) {
     const product = await Product.findOne({ where: { id: id } });
     if (!product) {
-      throw new NotFoundException('Product Not Found');
+      throw new ProductNotFoundException();
     }
     const rows = await Product.destroy({
       where: {
@@ -59,7 +83,7 @@ function makeProductsService({}) {
     if (rows == 1) {
       return product;
     } else if (rows == 0) {
-      throw new NotFoundException('Product Not Found');
+      throw new ProductNotFoundException();
     } else {
       throw new InternalServerException();
     }
@@ -68,7 +92,7 @@ function makeProductsService({}) {
   async function getProductById(id) {
     const product = await Product.findOne({ where: { id: id } });
     if (!product) {
-      throw new NotFoundException('Product Not Found');
+      throw new ProductNotFoundException();
     }
     return product;
   }
@@ -116,6 +140,11 @@ function makeProductsService({}) {
       };
     }
 
+    let order = null;
+    if (!!dto.sortBy) {
+      order = [[dto.sortBy, dto.sortDir || 'ASC']];
+    }
+
     // limits
     const limit = dto.limit || 10;
     const offset = dto.offset || 0;
@@ -124,7 +153,56 @@ function makeProductsService({}) {
       where: where,
       limit: limit,
       offset: offset,
+      order: order,
     });
+  }
+
+  async function addImagesToProduct(
+    id,
+    dto = Array({ srcPath, size, originalName, mimetype }),
+  ) {
+    const product = await Product.findOne({ where: { id: id } });
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
+
+    // get next rank
+    let nextRank =
+      ((await ProductImage.max('rank', {
+        where: { productId: id },
+      })) || 0) + 1;
+
+    // add database entires
+    const productImages = [];
+    const filesToMove = [];
+    await sequelize.transaction(async (t) => {
+      for (let i = 0; i < dto.length; i++) {
+        const name = randomAlphabeticString(40);
+        const ext = getFileExtension(dto[i].originalName);
+        const productImage = await ProductImage.create(
+          {
+            productId: id,
+            name: name,
+            extension: ext,
+            rank: nextRank++,
+          },
+          { transaction: t },
+        );
+        filesToMove.push({
+          src: dto[i].srcPath,
+          dest: getProductImagePath(name, ext),
+        });
+        productImages.push(productImage);
+      }
+    });
+
+    await Promise.all(
+      filesToMove.map((v) => {
+        return moveFile(v.src, v.dest);
+      }),
+    );
+
+    return productImages;
   }
 
   return {
@@ -134,6 +212,7 @@ function makeProductsService({}) {
     getProductById,
     getAllProducts,
     queryProducts,
+    addImagesToProduct,
   };
 }
 
