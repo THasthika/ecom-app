@@ -1,4 +1,5 @@
-import { Box, Button, Pagination } from '@mui/material';
+import { Box, Button, Divider, Pagination, Typography } from '@mui/material';
+import { useCartDispatch, cartActions } from 'context/cart';
 import { useTitleDispatch, titleActions } from 'context/title';
 import React, { useEffect, useState } from 'react';
 import { queryProducts } from '../api/products';
@@ -45,21 +46,14 @@ const useProductsQueryApi = () => {
 };
 
 const Home = () => {
-  // const [user, setUser] = useContext(UserContext);
-
-  // const titleDispatch = useTitleDispatch();
-  //   titleActions.setTitle(titleDispatch, {
-  //     documentTitle: 'Home',
-  //     pageTitle: 'Home',
-  //   });
-
   const dispatch = useTitleDispatch();
 
   useEffect(() => {
-    titleActions.setDocumentTitle(dispatch, {
-      title: 'Home',
+    titleActions.setTitle(dispatch, {
+      documentTitle: 'Home',
+      pageTitle: 'Home',
     });
-  }, []);
+  }, [dispatch]);
 
   const [searchState, setSearchState] = useState({
     query: '',
@@ -67,6 +61,7 @@ const Home = () => {
     maxPrice: '',
     minQuantity: '',
     sortBy: '',
+    sortDir: 'ASC',
   });
 
   function handleSearchStateChange(key, value) {
@@ -83,8 +78,18 @@ const Home = () => {
     setFilters({ page: 1, query: searchState });
   }
 
+  const cartDispatch = useCartDispatch();
+
+  function handleAddToCart(product) {
+    cartActions.addItem(cartDispatch, { ...product });
+  }
+
   return (
     <div>
+      <Typography variant="h5" sx={{ mt: 2 }}>
+        Products
+      </Typography>
+      <Divider />
       <Box pt={2} pb={2}>
         <ProductSearchForm
           query={searchState.query}
@@ -92,6 +97,7 @@ const Home = () => {
           maxPrice={searchState.maxPrice}
           minQuantity={searchState.minQuantity}
           sortBy={searchState.sortBy}
+          sortDir={searchState.sortDir}
           handleSubmit={handleOnSearch}
           updateValue={handleSearchStateChange}
         />
@@ -102,7 +108,10 @@ const Home = () => {
         ) : isError ? (
           <div>Error</div>
         ) : (
-          <ProductGrid products={data.products} handleAddToCard={() => {}} />
+          <ProductGrid
+            products={data.products}
+            handleAddToCart={handleAddToCart}
+          />
         )}
       </Box>
       <Box mt={2}>
@@ -117,7 +126,6 @@ const Home = () => {
           }}
         />
       </Box>
-      <Button onClick={() => {}}>ADD ITEMS</Button>
     </div>
   );
 };

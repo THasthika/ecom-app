@@ -10,7 +10,7 @@ const PageNotFound = () => {
       documentTitle: 'Page Not Found',
       pageTitle: 'Page Not Found',
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>

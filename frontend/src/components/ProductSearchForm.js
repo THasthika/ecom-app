@@ -22,6 +22,7 @@ const ProductSearchForm = ({
   maxPrice,
   minQuantity,
   sortBy,
+  sortDir,
   updateValue,
   handleSubmit,
 }) => {
@@ -86,8 +87,10 @@ const ProductSearchForm = ({
                   }}
                 ></TextField>
               </Box>
-              <FormControl size="small" sx={{ minWidth: 120, marginTop: 2 }}>
-                {/* <Box sx={{ marginTop: 2 }}> */}
+              <FormControl
+                size="small"
+                sx={{ minWidth: 120, marginTop: 2, marginRight: 2 }}
+              >
                 <InputLabel id="sort-by-label">Sort By</InputLabel>
                 <Select
                   size="small"
@@ -104,9 +107,26 @@ const ProductSearchForm = ({
                   </MenuItem>
                   <MenuItem value={'title'}>Title</MenuItem>
                   <MenuItem value={'price'}>Price</MenuItem>
-                  <MenuItem value={'quantity'}>Thirty</MenuItem>
+                  <MenuItem value={'quantity'}>Quantity</MenuItem>
                 </Select>
-                {/* </Box> */}
+              </FormControl>
+              <FormControl size="small" sx={{ minWidth: 120, marginTop: 2 }}>
+                <InputLabel id="sort-direction-label">
+                  Sort Direction
+                </InputLabel>
+                <Select
+                  size="small"
+                  labelId="sort-direction-label"
+                  id="sort-direction"
+                  value={sortDir}
+                  label="Sort Direction"
+                  onChange={(e) => {
+                    updateValue('sortDir', e.target.value);
+                  }}
+                >
+                  <MenuItem value="ASC">Ascending</MenuItem>
+                  <MenuItem value={'DESC'}>Descending</MenuItem>
+                </Select>
               </FormControl>
             </CardContent>
           </Collapse>

@@ -12,9 +12,9 @@ import {
 import { getProductImageUrl } from '../api/products';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { formatPrice } from '../utils';
+import { formatPrice, formatQuantity } from '../utils';
 
-const ProductGrid = ({ products, handleAddToCard }) => {
+const ProductGrid = ({ products, handleAddToCart }) => {
   return (
     <Grid spacing={2} container>
       {products.map((product) => (
@@ -40,6 +40,13 @@ const ProductGrid = ({ products, handleAddToCard }) => {
             </CardActionArea>
             <CardActions>
               <Typography
+                sx={{ ml: 1, marginRight: 'auto' }}
+                variant="body2"
+                color="text.secondary"
+              >
+                {formatQuantity(product.quantity)}
+              </Typography>
+              <Typography
                 sx={{ marginLeft: 'auto' }}
                 variant="body2"
                 color="text.secondary"
@@ -47,7 +54,7 @@ const ProductGrid = ({ products, handleAddToCard }) => {
                 {formatPrice(product.price)}
               </Typography>
               <IconButton
-                onClick={() => handleAddToCard(product)}
+                onClick={() => handleAddToCart(product)}
                 color="primary"
               >
                 <AddShoppingCart />
