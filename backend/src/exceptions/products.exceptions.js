@@ -13,8 +13,8 @@ class ProductImageNotFoundException extends NotFoundException {
 }
 
 class ProductImageCountWillExceeded extends BadRequestException {
-  constructor() {
-    super(`Maximum Allowed Image Count is ${productImageMax}`);
+  constructor(max = 5) {
+    super(`Maximum Allowed Image Count is ${max}`);
   }
 }
 

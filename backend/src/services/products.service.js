@@ -152,6 +152,7 @@ function makeProductsService({
     });
   }
 
+  // add images to product
   async function addImagesToProduct(
     id,
     dto = Array({ srcPath, size, originalName, mimetype }),
@@ -165,7 +166,7 @@ function makeProductsService({
       where: { productId: id },
     });
     if (count + dto.length > productImageMax) {
-      throw new ProductImageCountWillExceeded();
+      throw new ProductImageCountWillExceeded(productImageMax);
     }
 
     // get next rank
@@ -207,6 +208,7 @@ function makeProductsService({
     return productImages;
   }
 
+  // get all images of a product
   async function getProductImages(id) {
     const product = await Product.findOne({
       where: { id: id },
@@ -224,6 +226,7 @@ function makeProductsService({
     return productImages;
   }
 
+  // provide image path
   async function getProductImagePath(id, name) {
     const productImage = await ProductImage.findOne({
       where: { productId: id, name: name },
@@ -239,6 +242,34 @@ function makeProductsService({
     );
   }
 
+  // remove image
+  async function removeProductImage(id, image) {
+    const productImage = await ProductImage.findOne({
+      where: {
+        productId: id,
+        name: image,
+      },
+    });
+    if (!productImage) {
+      throw new ProductImageNotFoundException();
+    }
+    // remove database entry
+    await ProductImage.destroy({
+      where: {
+        productId: productImage.productId,
+        name: productImage.name,
+        rank: productImage.rank,
+      },
+    });
+
+    // remove file
+    await removeFile(
+      createProductImagePath(image, productImage.extension),
+    );
+
+    return productImage;
+  }
+
   return {
     createProduct,
     updateProduct,
@@ -249,6 +280,7 @@ function makeProductsService({
     addImagesToProduct,
     getProductImages,
     getProductImagePath,
+    removeProductImage,
   };
 }
 

@@ -157,6 +157,19 @@ function makeProductsController({ productsService }) {
     }),
   );
 
+  router.delete(
+    '/:id/images/:name',
+    param('id').isInt(),
+    param('name').notEmpty(),
+    validatorMiddleware,
+    controllerWrapper(async (req, res) => {
+      return await productsService.removeProductImage(
+        req.params.id,
+        req.params.name,
+      );
+    }),
+  );
+
   return router;
 }
 
