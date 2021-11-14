@@ -18,6 +18,6 @@ services:
       - db
     volumes:
       - ./backend/:/app
-    command: npm run migrate && npm run dev
+    command: npm run migrate && npm run seed && npm run dev
 volumes:
  dbdata:
