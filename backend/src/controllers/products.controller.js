@@ -170,6 +170,39 @@ function makeProductsController({ productsService }) {
     }),
   );
 
+  router.put(
+    '/:id/images/:name',
+    param('id').isInt(),
+    param('name').notEmpty(),
+    validatorMiddleware,
+    upload.single('image', {
+      limits: {
+        fileSize: 1024 * 1024 * 1,
+      },
+      fileFilter: (req, file, cb) => {
+        if (
+          ['jpeg', 'png'].includes(
+            file.mimetype.replace('image/', ''),
+          )
+        )
+          return cb(null, true);
+        return cb(new BadRequest('invalid file type'), false);
+      },
+    }),
+    controllerWrapper(async (req, res) => {
+      return await productsService.replaceProductImage(
+        req.params.id,
+        req.params.name,
+        {
+          srcPath: req.file.path,
+          mimetype: req.file.mimetype,
+          size: req.file.size,
+          originalName: req.file.originalname,
+        },
+      );
+    }),
+  );
+
   return router;
 }
 

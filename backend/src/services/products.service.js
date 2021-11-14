@@ -270,6 +270,44 @@ function makeProductsService({
     return productImage;
   }
 
+  // replace image
+  async function replaceProductImage(
+    id,
+    name,
+    dto = { srcPath, size, originalName, mimetype },
+  ) {
+    const productImage = await ProductImage.findOne({
+      where: { productId: id, name: name },
+    });
+    if (!productImage) {
+      throw new ProductImageNotFoundException();
+    }
+
+    // update db extension if extensions differ
+    const ext = getFileExtension(dto.originalName);
+    if (ext != productImage.extension) {
+      // remove old image
+      removeFile(
+        createProductImagePath(
+          productImage.image,
+          productImage.extension,
+        ),
+      );
+
+      productImage.extension = ext;
+      await ProductImage.update(
+        { extension: ext },
+        { where: { name: productImage.name, productId: id } },
+      );
+    }
+
+    // move the file to location
+    const imagePath = createProductImagePath(name, ext);
+    await moveFile(dto.srcPath, imagePath);
+
+    return productImage;
+  }
+
   return {
     createProduct,
     updateProduct,
@@ -281,6 +319,7 @@ function makeProductsService({
     getProductImages,
     getProductImagePath,
     removeProductImage,
+    replaceProductImage,
   };
 }
 
