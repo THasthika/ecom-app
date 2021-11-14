@@ -59,7 +59,7 @@ function makeProductsController({ productsService }) {
     query('maxPrice').isFloat().optional(),
     query('minQuantity').isInt().optional(),
     query('sortBy')
-      .isIn(['title', 'price', 'createdAt', 'updatedAt'])
+      .isIn(['title', 'price', 'quantity', 'createdAt', 'updatedAt'])
       .optional(),
     query('sortDir').isIn(['ASC', 'DESC']).optional(),
     query('limit').isInt().optional(),
