@@ -3,7 +3,7 @@
 /node_modules
 
 /temp/*
-/data/image/*
+/data/images/*
 
 !.gitkeep
 
