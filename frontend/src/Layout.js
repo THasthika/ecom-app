@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Toolbar, Box } from '@mui/material';
+import { Toolbar, Box, Container } from '@mui/material';
 import Header from './components/Header';
 
 const Layout = ({ children, window }) => {
@@ -32,8 +32,10 @@ const Layout = ({ children, window }) => {
   return (
     <Box>
       <Header></Header>
-      <Toolbar />
-      <Box>{children}</Box>
+      <Container>
+        <Toolbar />
+        {children}
+      </Container>
     </Box>
   );
 };

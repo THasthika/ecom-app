@@ -1,4 +1,4 @@
 import { TitleProvider, useTitle, useTitleDispatch } from './context';
-import * as actions from './actions';
+import * as titleActions from './actions';
 
-export { TitleProvider, useTitle, useTitleDispatch, actions };
+export { TitleProvider, useTitle, useTitleDispatch, titleActions };

@@ -1,5 +1,4 @@
 export const titleReducer = (state, { type, payload }) => {
-  console.log(type);
   switch (type) {
     case 'SET_PAGE_TITLE':
       return {

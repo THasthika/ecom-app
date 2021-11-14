@@ -1,14 +1,10 @@
-import { useMemo, useState } from 'react';
-import Header from './components/Header';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Route, Routes, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import Toolbar from '@mui/material/Toolbar';
-import PageNotFound from './pages/PageNotFound';
-
+import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from './context/theme';
 import { TitleProvider } from './context/title';
 import Layout from './Layout';
+import Home from './pages/Home';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
   return (
