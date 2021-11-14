@@ -16,7 +16,7 @@ function controllerWrapper(fn) {
       const ret = await fn(req, res);
       if (typeof ret === 'object' && ret !== null) {
         res.json(jsonResponse('success', ret));
-      } else {
+      } else if (ret !== null) {
         res.send(ret);
       }
     } catch (err) {

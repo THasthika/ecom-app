@@ -146,7 +146,14 @@ function makeProductsController({ productsService }) {
         req.params.id,
         req.params.name,
       );
-      res.sendFile(imagePath);
+      return new Promise((resolve, reject) => {
+        res.sendFile(imagePath, (err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      });
     }),
   );
 

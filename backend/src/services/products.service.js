@@ -5,6 +5,7 @@ const { InternalServerException } = require('../exceptions');
 const {
   ProductImageCountWillExceeded,
   ProductNotFoundException,
+  ProductImageNotFoundException,
 } = require('../exceptions/products.exceptions');
 const config = require('../config');
 
@@ -18,7 +19,7 @@ function makeProductsService({
   getFileExtension,
   joinPath,
 }) {
-  function getProductImagePath(name, ext) {
+  function createProductImagePath(name, ext) {
     return joinPath(
       config.APP_ROOT,
       config.APP_IMAGE_DIR,
@@ -191,7 +192,7 @@ function makeProductsService({
         );
         filesToMove.push({
           src: dto[i].srcPath,
-          dest: getProductImagePath(name, ext),
+          dest: createProductImagePath(name, ext),
         });
         productImages.push(productImage);
       }
@@ -224,12 +225,18 @@ function makeProductsService({
   }
 
   async function getProductImagePath(id, name) {
-    const product = await Product.findOne({
-      where: { id: id },
+    const productImage = await ProductImage.findOne({
+      where: { productId: id, name: name },
+      attributes: ['name', 'extension'],
     });
-    if (!product) {
-      throw new ProductNotFoundException();
+    if (!productImage) {
+      throw new ProductImageNotFoundException();
     }
+
+    return createProductImagePath(
+      productImage.name,
+      productImage.extension,
+    );
   }
 
   return {
@@ -241,6 +248,7 @@ function makeProductsService({
     queryProducts,
     addImagesToProduct,
     getProductImages,
+    getProductImagePath,
   };
 }
 

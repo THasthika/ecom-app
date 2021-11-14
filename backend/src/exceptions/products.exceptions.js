@@ -6,6 +6,12 @@ class ProductNotFoundException extends NotFoundException {
   }
 }
 
+class ProductImageNotFoundException extends NotFoundException {
+  constructor() {
+    super('Product Image Not Found');
+  }
+}
+
 class ProductImageCountWillExceeded extends BadRequestException {
   constructor() {
     super(`Maximum Allowed Image Count is ${productImageMax}`);
@@ -14,5 +20,6 @@ class ProductImageCountWillExceeded extends BadRequestException {
 
 module.exports = {
   ProductNotFoundException,
+  ProductImageNotFoundException,
   ProductImageCountWillExceeded,
 };
