@@ -142,12 +142,23 @@ function makeProductsService({
     const limit = dto.limit || 10;
     const offset = dto.offset || 0;
 
-    return await Product.findAll({
-      where: where,
-      limit: limit,
-      offset: offset,
-      order: order,
-    });
+    const [products, totalCount] = await Promise.all([
+      Product.findAll({
+        where: where,
+        limit: limit,
+        offset: offset,
+        order: order,
+        include: { model: ProductImage, as: 'images' },
+      }),
+      Product.count({
+        where: where,
+      }),
+    ]);
+
+    return {
+      products,
+      totalCount,
+    };
   }
 
   // add images to product

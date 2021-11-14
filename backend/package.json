@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "format": "prettier --write .",
+    "start": "node ./bin/start.js",
     "dev": "nodemon ./bin/start.js"
   },
   "author": "",

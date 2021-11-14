@@ -12,7 +12,7 @@ function makeProductsController({ productsService }) {
     '/',
     body('title').notEmpty(),
     body('description').notEmpty(),
-    body('price').notEmpty().isInt(),
+    body('price').notEmpty().isFloat(),
     body('quantity').notEmpty().isInt(),
     validatorMiddleware,
     controllerWrapper(async (req, res) => {
@@ -30,7 +30,7 @@ function makeProductsController({ productsService }) {
     param('id').isInt(),
     body('title').notEmpty().optional(),
     body('description').notEmpty().optional(),
-    body('price').notEmpty().isInt().optional(),
+    body('price').notEmpty().isFloat().optional(),
     body('quantity').notEmpty().isInt().optional(),
     validatorMiddleware,
     controllerWrapper(async (req, res) => {
@@ -55,8 +55,8 @@ function makeProductsController({ productsService }) {
   router.get(
     '/query',
     query('q').isString().optional(),
-    query('minPrice').isInt().optional(),
-    query('maxPrice').isInt().optional(),
+    query('minPrice').isFloat().optional(),
+    query('maxPrice').isFloat().optional(),
     query('minQuantity').isInt().optional(),
     query('sortBy')
       .isIn(['title', 'price', 'createdAt', 'updatedAt'])
