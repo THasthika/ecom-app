@@ -47,11 +47,15 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title.pageTitle}
           </Typography>
-          <Button color="inherit" component={Link} to="/">
+          <Button component={Link} to="/" color="inherit">
             Home
           </Button>
-          <Button color="inherit">Register</Button>
-          <Button color="inherit">Login</Button>
+          <Button component={Link} to="/register" color="inherit">
+            Register
+          </Button>
+          <Button component={Link} to="/login" color="inherit">
+            Login
+          </Button>
           <IconButton component={Link} to="/cart" sx={{ ml: 1 }}>
             <StyledBadge badgeContent={countItems(cart)} color="secondary">
               <ShoppingCartIcon />
