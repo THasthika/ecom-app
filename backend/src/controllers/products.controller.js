@@ -104,11 +104,7 @@ function makeProductsController({ productsService }) {
         fileSize: 1024 * 1024 * 1,
       },
       fileFilter: (req, file, cb) => {
-        if (
-          ['jpeg', 'png'].includes(
-            file.mimetype.replace('image/', ''),
-          )
-        )
+        if (['jpeg', 'png'].includes(file.mimetype.replace('image/', '')))
           return cb(null, true);
         return cb(new BadRequest('invalid file type'), false);
       },
@@ -120,10 +116,7 @@ function makeProductsController({ productsService }) {
         size: v.size,
         originalName: v.originalname,
       }));
-      return await productsService.addImagesToProduct(
-        req.params.id,
-        dto,
-      );
+      return await productsService.addImagesToProduct(req.params.id, dto);
     }),
   );
 
@@ -180,11 +173,7 @@ function makeProductsController({ productsService }) {
         fileSize: 1024 * 1024 * 1,
       },
       fileFilter: (req, file, cb) => {
-        if (
-          ['jpeg', 'png'].includes(
-            file.mimetype.replace('image/', ''),
-          )
-        )
+        if (['jpeg', 'png'].includes(file.mimetype.replace('image/', '')))
           return cb(null, true);
         return cb(new BadRequest('invalid file type'), false);
       },

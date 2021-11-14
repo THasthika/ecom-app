@@ -2,13 +2,7 @@ const { validationResult } = require('express-validator');
 const { jsonResponse } = require('../utils');
 
 module.exports = (req, res, next) => {
-  const errorFormatter = ({
-    location,
-    msg,
-    param,
-    value,
-    nestedErrors,
-  }) => {
+  const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
     // Build your resulting errors however you want! String, object, whatever - it works!
     return `${param}: ${msg}`;
   };

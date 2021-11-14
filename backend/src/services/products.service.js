@@ -27,9 +27,7 @@ function makeProductsService({
     );
   }
 
-  function createProduct(
-    dto = { title, description, price, quantity },
-  ) {
+  function createProduct(dto = { title, description, price, quantity }) {
     return Product.create(dto);
   }
 
@@ -236,10 +234,7 @@ function makeProductsService({
       throw new ProductImageNotFoundException();
     }
 
-    return createProductImagePath(
-      productImage.name,
-      productImage.extension,
-    );
+    return createProductImagePath(productImage.name, productImage.extension);
   }
 
   // remove image
@@ -263,9 +258,7 @@ function makeProductsService({
     });
 
     // remove file
-    await removeFile(
-      createProductImagePath(image, productImage.extension),
-    );
+    await removeFile(createProductImagePath(image, productImage.extension));
 
     return productImage;
   }
@@ -288,10 +281,7 @@ function makeProductsService({
     if (ext != productImage.extension) {
       // remove old image
       removeFile(
-        createProductImagePath(
-          productImage.image,
-          productImage.extension,
-        ),
+        createProductImagePath(productImage.image, productImage.extension),
       );
 
       productImage.extension = ext;
