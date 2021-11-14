@@ -19,7 +19,7 @@ services:
     volumes:
       - ./backend/:/app
     command: npm run migrate && npm run dev
-  frontned:
+  frontend:
     build: ./frontend/
     ports:
       - 8000:3000
