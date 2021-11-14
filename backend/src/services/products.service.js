@@ -1,20 +1,15 @@
 const { Product, ProductImage, sequelize } = require('../models');
 
 const { Op } = require('sequelize');
+const { InternalServerException } = require('../exceptions');
 const {
-  HttpException,
-  InternalServerException,
-  NotFoundException,
-} = require('../utils/exceptions');
+  ProductImageCountWillExceeded,
+  ProductNotFoundException,
+} = require('../exceptions/products.exceptions');
 const config = require('../config');
 
 const productImagePrefix = 'product_';
-
-class ProductNotFoundException extends NotFoundException {
-  constructor() {
-    super('Product Not Found');
-  }
-}
+const productImageMax = 5;
 
 function makeProductsService({
   moveFile,
@@ -61,8 +56,7 @@ function makeProductsService({
     });
 
     if (rows == 1) {
-      const product = await Product.findOne({ where: { id: id } });
-      return product;
+      return await Product.findOne({ where: { id: id } });
     } else if (rows == 0) {
       throw new ProductNotFoundException();
     } else {
@@ -166,6 +160,13 @@ function makeProductsService({
       throw new ProductNotFoundException();
     }
 
+    const count = await ProductImage.count({
+      where: { productId: id },
+    });
+    if (count + dto.length > productImageMax) {
+      throw new ProductImageCountWillExceeded();
+    }
+
     // get next rank
     let nextRank =
       ((await ProductImage.max('rank', {
@@ -205,6 +206,32 @@ function makeProductsService({
     return productImages;
   }
 
+  async function getProductImages(id) {
+    const product = await Product.findOne({
+      where: { id: id },
+    });
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
+    const productImages = await ProductImage.findAll({
+      where: {
+        productId: product.id,
+      },
+      order: [['rank', 'ASC']],
+    });
+
+    return productImages;
+  }
+
+  async function getProductImagePath(id, name) {
+    const product = await Product.findOne({
+      where: { id: id },
+    });
+    if (!product) {
+      throw new ProductNotFoundException();
+    }
+  }
+
   return {
     createProduct,
     updateProduct,
@@ -213,6 +240,7 @@ function makeProductsService({
     getAllProducts,
     queryProducts,
     addImagesToProduct,
+    getProductImages,
   };
 }
 

@@ -8,10 +8,7 @@ const config = require('./config');
 
 const makeServices = require('./services');
 const makeControllers = require('./controllers');
-const {
-  HttpException,
-  NotFoundException,
-} = require('./utils/exceptions');
+const { HttpException, NotFoundException } = require('./exceptions');
 
 const services = makeServices();
 const controllers = makeControllers(services);

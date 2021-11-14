@@ -3,7 +3,6 @@ const { body, param, query } = require('express-validator');
 const { controllerWrapper } = require('../utils');
 const validatorMiddleware = require('../middlewares/validator.middleware');
 const { upload } = require('../utils/multerHelper');
-const { HttpException } = require('../utils/exceptions');
 const { BadRequest } = require('http-errors');
 
 function makeProductsController({ productsService }) {
@@ -98,6 +97,8 @@ function makeProductsController({ productsService }) {
 
   router.post(
     '/:id/images',
+    param('id').isInt(),
+    validatorMiddleware,
     upload.array('images', 5, {
       limits: {
         fileSize: 1024 * 1024 * 1,
@@ -123,6 +124,29 @@ function makeProductsController({ productsService }) {
         req.params.id,
         dto,
       );
+    }),
+  );
+
+  router.get(
+    '/:id/images',
+    param('id').isInt(),
+    validatorMiddleware,
+    controllerWrapper(async (req, res) => {
+      return await productsService.getProductImages(req.params.id);
+    }),
+  );
+
+  router.get(
+    '/:id/images/:name',
+    param('id').isInt(),
+    param('name').notEmpty(),
+    validatorMiddleware,
+    controllerWrapper(async (req, res) => {
+      const imagePath = await productsService.getProductImagePath(
+        req.params.id,
+        req.params.name,
+      );
+      res.sendFile(imagePath);
     }),
   );
 
