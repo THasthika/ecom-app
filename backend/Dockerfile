@@ -12,11 +12,13 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm install --silent
 
+# install bash
+RUN apk update && apk add bash
+
 # expose port
 EXPOSE 8000
 
 # add app
 COPY . ./
 
-# start app
-CMD ["npm", "start"]
+ENTRYPOINT [ "/bin/bash", "./entrypoint.sh" ]
