@@ -16,11 +16,8 @@ services:
       - 8001:8000
     depends_on:
       - db
-  frontned:
-    build: ./frontend/
-    ports:
-      - 8000:3000
-    depends_on:
-      - backend
+    volumes:
+      - ./backend/:/app
+    command: npm run migrate && npm run dev
 volumes:
  dbdata:
