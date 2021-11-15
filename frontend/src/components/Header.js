@@ -16,7 +16,9 @@ import {
 import { useTitle } from '../context/title';
 import { styled } from '@mui/material/styles';
 import { useCart } from 'context/cart';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { userActions, useUser, useUserDispatch } from 'context/user';
+import { useSnackbar } from 'notistack';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -33,12 +35,29 @@ function countItems(cart) {
 }
 
 const Header = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const navigate = useNavigate();
+
+  const user = useUser();
+  const userDispatch = useUserDispatch();
+
   const cart = useCart();
 
   const title = useTitle();
 
   const theme = useThemeState();
   const themeDispatch = useThemeDispatch();
+
+  function handleLogout() {
+    userActions.logoutUser(userDispatch);
+
+    enqueueSnackbar('Logged Out Successfully!', {
+      variant: 'success',
+    });
+
+    navigate('/');
+  }
 
   return (
     <AppBar position="fixed">
@@ -50,12 +69,25 @@ const Header = () => {
           <Button component={Link} to="/" color="inherit">
             Home
           </Button>
-          <Button component={Link} to="/register" color="inherit">
-            Register
-          </Button>
-          <Button component={Link} to="/login" color="inherit">
-            Login
-          </Button>
+          {!!user ? (
+            <>
+              <Button component={Link} to="/profile" color="inherit">
+                {user.name}
+              </Button>
+              <Button onClick={handleLogout} color="inherit">
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button component={Link} to="/register" color="inherit">
+                Register
+              </Button>
+              <Button component={Link} to="/login" color="inherit">
+                Login
+              </Button>
+            </>
+          )}
           <IconButton component={Link} to="/cart" sx={{ ml: 1 }}>
             <StyledBadge badgeContent={countItems(cart)} color="secondary">
               <ShoppingCartIcon />

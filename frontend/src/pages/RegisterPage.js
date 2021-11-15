@@ -1,19 +1,20 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Avatar, Box, Grid, Link, TextField, Typography } from '@mui/material';
 import { titleActions, useTitleDispatch } from 'context/title';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import api from '../api';
 
 function RegisterPage() {
   const titleDispatch = useTitleDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: '',
@@ -28,7 +29,31 @@ function RegisterPage() {
     });
   }, [titleDispatch]);
 
-  function handleSubmit() {}
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    setIsLoading(true);
+
+    try {
+      await api.user.register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
+
+      enqueueSnackbar('User Created. Please Login', {
+        variant: 'success',
+      });
+
+      navigate('/login');
+    } catch (err) {
+      enqueueSnackbar(err.message, {
+        variant: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   function handleFormChange(key, value) {
     setForm({
@@ -99,14 +124,15 @@ function RegisterPage() {
             />
           </Grid>
         </Grid>
-        <Button
+        <LoadingButton
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          loading={isLoading}
         >
           Register
-        </Button>
+        </LoadingButton>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link component={RouterLink} to="/login">

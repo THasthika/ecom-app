@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiHost } from './index';
+import { apiHost } from './utils';
 
 export async function queryProducts(params, page, perPage) {
   const limit = perPage;

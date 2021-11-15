@@ -2,7 +2,7 @@ import { Box, Divider, Pagination, Typography } from '@mui/material';
 import { cartActions, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
 import React, { useEffect, useState } from 'react';
-import { queryProducts } from '../api/products';
+import api from '../api';
 import ProductGrid from '../components/ProductGrid';
 import ProductSearchForm from '../components/ProductSearchForm';
 
@@ -23,7 +23,7 @@ const useProductsQueryApi = () => {
       setIsError(false);
       setIsLoading(true);
       try {
-        const results = await queryProducts(
+        const results = await api.products.queryProducts(
           filters.query,
           filters.page,
           perPage,

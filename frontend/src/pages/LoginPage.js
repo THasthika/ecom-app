@@ -1,23 +1,23 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { login } from 'api/user';
+import { LoadingButton } from '@mui/lab';
+import { Avatar, Box, Grid, Link, TextField, Typography } from '@mui/material';
 import { titleActions, useTitleDispatch } from 'context/title';
 import { userActions, useUserDispatch } from 'context/user';
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import api from '../api';
 
 function LoginPage() {
   const titleDispatch = useTitleDispatch();
 
   const userDispatch = useUserDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: '',
@@ -34,12 +34,31 @@ function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const data = await login({ email: form.email, password: form.password });
+    setIsLoading(true);
 
-    userActions.setUserData(userDispatch, {
-      token: data.token,
-      name: data.name,
-    });
+    try {
+      const data = await api.auth.login({
+        email: form.email,
+        password: form.password,
+      });
+
+      enqueueSnackbar('Login Success!', {
+        variant: 'success',
+      });
+
+      userActions.setUserData(userDispatch, {
+        token: data.token,
+        name: data.name,
+        email: data.email,
+      });
+
+      navigate('/');
+    } catch (err) {
+      enqueueSnackbar(err.message, {
+        variant: 'error',
+      });
+      setIsLoading(false);
+    }
   }
 
   function handleFormChange(key, value) {
@@ -97,14 +116,15 @@ function LoginPage() {
             />
           </Grid>
         </Grid>
-        <Button
+        <LoadingButton
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          loading={isLoading}
         >
           Login
-        </Button>
+        </LoadingButton>
         <Grid container justifyContent="flex-end">
           <Grid item>
             <Link component={RouterLink} to="/register">

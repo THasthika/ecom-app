@@ -5,6 +5,7 @@ export const userReducer = (state, { type, payload }) => {
         ...state,
         token: payload.token,
         name: payload.name,
+        email: payload.email,
       };
     case 'USER_LOGOUT':
       return null;
