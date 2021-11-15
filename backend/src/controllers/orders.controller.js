@@ -15,7 +15,6 @@ function makeOrdersController({ ordersService }) {
     body('products').isArray(),
     body('products.*.id').isInt(),
     body('products.*.amount').isInt(),
-    body('products.*.price').isFloat(),
     validatorMiddleware,
     checkAccessTokenMiddleware,
     validAccessTokenOrRejectMiddleware,
