@@ -33,6 +33,7 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "randomstring": "^1.2.1",
+    "redis": "^4.0.0-rc.3",
     "sequelize": "^6.9.0"
   },
   "jest": {
