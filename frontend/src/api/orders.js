@@ -17,3 +17,19 @@ export async function createOrder({ token, products }) {
     handleApiError(err);
   }
 }
+
+const orderHistoryUrl = `${apiHost}/orders`;
+
+export async function getOrderHistory({ token }) {
+  try {
+    const response = await axios(orderHistoryUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      method: 'GET',
+    });
+    return response.data.data;
+  } catch (err) {
+    handleApiError(err);
+  }
+}

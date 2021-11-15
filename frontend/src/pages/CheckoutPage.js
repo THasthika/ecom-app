@@ -52,9 +52,9 @@ function CheckoutPage() {
         products,
       });
       cartActions.clearCart(cartDispatch);
-      enqueueSnackbar('Order Placed!');
+      enqueueSnackbar('Order Placed!', { variant: 'success' });
     } catch (err) {
-      enqueueSnackbar(err);
+      enqueueSnackbar(err.message, { variant: 'error' });
     }
   }
 
@@ -66,7 +66,7 @@ function CheckoutPage() {
       <Divider sx={{ mb: 2 }} />
       <List disablePadding>
         {cart.items.map((product) => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
+          <ListItem key={product.id} sx={{ py: 1, px: 0 }}>
             <ListItemText
               primary={product.title}
               secondary={product.description}
