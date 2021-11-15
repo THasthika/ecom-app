@@ -3,6 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -13,11 +14,17 @@ import {
 import { getProductImageUrl } from 'api/products';
 import { cartActions, useCart, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
+import { useUser } from 'context/user';
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { formatPrice } from 'utils';
 
 function CartPage() {
   const titleDispatch = useTitleDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const user = useUser();
 
   const cart = useCart();
   const cartDispatch = useCartDispatch();
@@ -50,15 +57,19 @@ function CartPage() {
     cartActions.removeItem(cartDispatch, { id: cartItem.id });
   }
 
+  function handleOnCheckout() {
+    if (!user) {
+      enqueueSnackbar('must be logged in', { variant: 'warning' });
+      return;
+    }
+  }
+
   return (
     <div>
       <Typography variant="h5" sx={{ mt: 2 }}>
         Items
       </Typography>
-      <Divider />
-      <Typography variant="h6" sx={{ mt: 2, textAlign: 'right' }}>
-        Total: {formatPrice(total)}
-      </Typography>
+      <Divider sx={{ mb: 2 }} />
       {cart.items.map((cartItem) => (
         <Card sx={{ display: 'flex', mb: 2 }} key={cartItem.id}>
           {cartItem.images.length > 0 && (
@@ -136,6 +147,14 @@ function CartPage() {
           </Box>
         </Card>
       ))}
+      <Typography variant="h6" sx={{ mt: 2, textAlign: 'right' }}>
+        Total: {formatPrice(total)}
+      </Typography>
+      <Box sx={{ mt: 2, textAlign: 'right' }}>
+        <Button variant="contained" color="primary" onClick={handleOnCheckout}>
+          Checkout
+        </Button>
+      </Box>
     </div>
   );
 }

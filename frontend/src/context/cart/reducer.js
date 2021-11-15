@@ -72,6 +72,12 @@ export const cartReducer = (state, { type, payload }) => {
         items: newItems,
       };
     }
+    case 'CLEAR_CART': {
+      return {
+        ...state,
+        items: [],
+      };
+    }
     default:
       throw new Error(`Unhandled action type: ${type}`);
   }

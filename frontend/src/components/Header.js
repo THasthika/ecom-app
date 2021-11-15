@@ -15,7 +15,7 @@ import {
 } from '../context/theme';
 import { useTitle } from '../context/title';
 import { styled } from '@mui/material/styles';
-import { useCart } from 'context/cart';
+import { cartActions, useCart, useCartDispatch } from 'context/cart';
 import { Link, useNavigate } from 'react-router-dom';
 import { userActions, useUser, useUserDispatch } from 'context/user';
 import { useSnackbar } from 'notistack';
@@ -43,6 +43,7 @@ const Header = () => {
   const userDispatch = useUserDispatch();
 
   const cart = useCart();
+  const cartDispatch = useCartDispatch();
 
   const title = useTitle();
 
@@ -50,7 +51,9 @@ const Header = () => {
   const themeDispatch = useThemeDispatch();
 
   function handleLogout() {
+    // clear cart and user
     userActions.logoutUser(userDispatch);
+    cartActions.clearCart(cartDispatch);
 
     enqueueSnackbar('Logged Out Successfully!', {
       variant: 'success',

@@ -25,3 +25,7 @@ export const decrementAmount = (dispatch, { id }) => {
     payload: { id },
   });
 };
+
+export const clearCart = (dispatch) => {
+  dispatch({ type: 'CLEAR_CART' });
+};
