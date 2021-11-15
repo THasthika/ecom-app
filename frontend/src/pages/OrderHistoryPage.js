@@ -1,74 +1,16 @@
-import api from '../api';
-import { titleActions, useTitleDispatch } from '../context/title';
-import { useUser } from '../context/user';
-import React, { useEffect, useState } from 'react';
 import {
   Box,
-  Typography,
   Divider,
   ListItem,
   ListItemText,
   Paper,
+  Typography,
 } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import api from '../api';
+import { titleActions, useTitleDispatch } from '../context/title';
+import { useUser } from '../context/user';
 import { formatPrice } from '../utils';
-
-const state = {
-  orders: [
-    {
-      id: 6,
-      userId: 3,
-      createdAt: '2021-11-15T12:54:41.424Z',
-      updatedAt: '2021-11-15T12:54:41.424Z',
-      orderItems: [
-        {
-          id: 9,
-          orderId: 6,
-          productId: 8,
-          amount: 3,
-          price: '200.00',
-          createdAt: '2021-11-15T12:54:41.428Z',
-          updatedAt: '2021-11-15T12:54:41.428Z',
-        },
-      ],
-    },
-    {
-      id: 5,
-      userId: 3,
-      createdAt: '2021-11-15T12:48:36.555Z',
-      updatedAt: '2021-11-15T12:48:36.555Z',
-      orderItems: [
-        {
-          id: 8,
-          orderId: 5,
-          productId: 8,
-          amount: 5,
-          price: '200.00',
-          createdAt: '2021-11-15T12:48:36.560Z',
-          updatedAt: '2021-11-15T12:48:36.560Z',
-        },
-      ],
-    },
-  ],
-  products: [
-    {
-      id: 8,
-      title: 'Product - 2',
-      description: 'Lorem 123321',
-      price: '200.00',
-      quantity: 6,
-      createdAt: '2021-11-14T18:52:48.969Z',
-      updatedAt: '2021-11-15T12:54:41.419Z',
-      images: [
-        {
-          productId: 8,
-          name: 'rwoxtuYSVsGPnmcloIPAlaENLXZAvdxJkaKFdnTT',
-          extension: 'jpeg',
-          rank: 1,
-        },
-      ],
-    },
-  ],
-};
 
 function OrderItemView({ orderItem, product }) {
   return (
@@ -160,8 +102,11 @@ function OrderHistoryPage() {
 
     async function fetchData() {
       try {
-        // const data = await api.orders.getOrderHistory({ token: user.token });
-        // console.log(data);
+        const data = await api.orders.getOrderHistory({ token: user.token });
+        setOrderHistory({
+          orders: data.orders,
+          products: data.products,
+        });
       } catch (err) {
         setIsError(true);
       }
@@ -169,7 +114,7 @@ function OrderHistoryPage() {
     }
 
     fetchData();
-  }, []);
+  }, [user]);
 
   if (isLoading) {
     return loadingDiv;
@@ -178,7 +123,10 @@ function OrderHistoryPage() {
       return errorDiv;
     } else {
       return (
-        <OrderHistoryHolder orders={state.orders} products={state.products} />
+        <OrderHistoryHolder
+          orders={orderHistory.orders}
+          products={orderHistory.products}
+        />
       );
     }
   }

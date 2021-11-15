@@ -1,21 +1,13 @@
-import api from '../api';
+import { AddShoppingCart } from '@mui/icons-material';
+import { Button, Divider, Grid, Paper, Typography } from '@mui/material';
+import { cartActions, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
+import { Image } from 'mui-image';
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Typography,
-  Box,
-  Grid,
-  Paper,
-  Divider,
-  IconButton,
-  Button,
-} from '@mui/material';
-import { Image } from 'mui-image';
 import { formatPrice, formatQuantity } from 'utils';
-import { AddShoppingCart } from '@mui/icons-material';
-import { cartActions, useCartDispatch } from 'context/cart';
-import { useSnackbar } from 'notistack';
+import api from '../api';
 
 function ProductPage() {
   const titleDispatch = useTitleDispatch();
