@@ -23,6 +23,7 @@ services:
       - redis
     volumes:
       - ./backend/:/app
+      - /app/node_modules/
     command: npm run migrate && npm run seed && npm run dev
   frontend:
     build: ./frontend/
