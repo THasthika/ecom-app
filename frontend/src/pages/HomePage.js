@@ -59,7 +59,7 @@ const HomePage = () => {
   }, [dispatch]);
 
   const [searchState, setSearchState] = useState({
-    query: '',
+    q: '',
     minPrice: '',
     maxPrice: '',
     minQuantity: '',
@@ -96,7 +96,7 @@ const HomePage = () => {
       <Divider />
       <Box pt={2} pb={2}>
         <ProductSearchForm
-          query={searchState.query}
+          query={searchState.q}
           minPrice={searchState.minPrice}
           maxPrice={searchState.maxPrice}
           minQuantity={searchState.minQuantity}
