@@ -14,19 +14,8 @@ services:
     image: redis:6.2-alpine
     volumes:
       - memdb:/data
-  backend:
-    build: ./backend/
     ports:
-      - 8001:8000
-    depends_on:
-      - db
-      - redis
-  frontend:
-    build: ./frontend/
-    ports:
-      - 8000:3000
-    depends_on:
-      - backend
+      - 6379:6379
 volumes:
  dbdata:
  memdb:
