@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../api';
 import { titleActions, useTitleDispatch } from '../context/title';
 import { useUser } from '../context/user';
-import { formatPrice } from '../utils';
+import { formatDate, formatPrice } from '../utils';
 
 function OrderItemView({ orderItem, product }) {
   return (
@@ -36,7 +36,7 @@ function OrderView({ order, productMap }) {
         Order Id: {order.id}
       </Typography>
       <Typography variant="subtitle2" fontWeight="bold">
-        Date: {order.createdAt}
+        Date: {formatDate(order.createdAt)}
       </Typography>
       <Divider />
       {order.orderItems.map((v) => (
