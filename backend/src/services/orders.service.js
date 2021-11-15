@@ -2,7 +2,13 @@ const {
   InternalServerException,
   BadRequestException,
 } = require('../exceptions');
-const { Order, OrderItem, Product, sequelize } = require('../models');
+const {
+  Order,
+  OrderItem,
+  Product,
+  ProductImage,
+  sequelize,
+} = require('../models');
 
 function makeOrdersService({}) {
   async function createOrder({ userId, products }) {
@@ -66,7 +72,39 @@ function makeOrdersService({}) {
     return orderEntity;
   }
 
-  return { createOrder };
+  async function getOrdersByUserId({ userId }) {
+    const orders = await Order.findAll({
+      where: { userId: userId },
+      order: [['createdAt', 'DESC']],
+      include: [
+        {
+          model: OrderItem,
+          as: 'orderItems',
+        },
+      ],
+    });
+
+    const productIdMap = {};
+    orders.forEach((order) => {
+      order.orderItems.forEach((item) => {
+        productIdMap[item.productId] = 1;
+      });
+    });
+
+    const products = await Product.findAll({
+      where: { id: Object.keys(productIdMap) },
+      include: [
+        {
+          model: ProductImage,
+          as: 'images',
+        },
+      ],
+    });
+
+    return { orders, products };
+  }
+
+  return { createOrder, getOrdersByUserId };
 }
 
 module.exports = makeOrdersService;

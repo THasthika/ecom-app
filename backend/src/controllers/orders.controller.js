@@ -28,6 +28,16 @@ function makeOrdersController({ ordersService }) {
     }),
   );
 
+  router.get(
+    '/',
+    checkAccessTokenMiddleware,
+    validAccessTokenOrRejectMiddleware,
+    controllerWrapper(async (req, res) => {
+      const userId = res.locals.userId;
+      return await ordersService.getOrdersByUserId({ userId });
+    }),
+  );
+
   return router;
 }
 
