@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useTitleDispatch, titleActions } from '../context/title';
 
-const PageNotFound = () => {
+const NotFoundPage = () => {
   const dispatch = useTitleDispatch();
 
   useEffect(() => {
@@ -21,4 +21,4 @@ const PageNotFound = () => {
   );
 };
 
-export default PageNotFound;
+export default NotFoundPage;

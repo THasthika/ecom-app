@@ -1,30 +1,31 @@
 import CssBaseline from '@mui/material/CssBaseline';
+import { NotifyProvider } from 'context/notify';
+import CartPage from 'pages/CartPage';
+import LoginPage from 'pages/LoginPage';
+import RegisterPage from 'pages/RegisterPage';
 import { Route, Routes } from 'react-router-dom';
+import { CartProvider } from './context/cart';
 import { ThemeProvider } from './context/theme';
 import { TitleProvider } from './context/title';
 import { UserProvider, useUser } from './context/user';
-import { CartProvider } from './context/cart';
 import Layout from './Layout';
-import Home from './pages/Home';
-import PageNotFound from './pages/PageNotFound';
-import Cart from 'pages/Cart';
-import Register from 'pages/Register';
-import Login from 'pages/Login';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function RoutesHolder() {
   const user = useUser();
 
   return (
     <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/cart" element={<Cart />}></Route>
+      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/cart" element={<CartPage />}></Route>
       {!user && (
         <>
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route path="/register" element={<RegisterPage />}></Route>
+          <Route path="/login" element={<LoginPage />}></Route>
         </>
       )}
-      <Route path="*" element={<PageNotFound />}></Route>
+      <Route path="*" element={<NotFoundPage />}></Route>
     </Routes>
   );
 }
@@ -32,20 +33,22 @@ function RoutesHolder() {
 function App() {
   return (
     <div>
-      <UserProvider>
-        <CartProvider>
-          <TitleProvider>
-            <ThemeProvider>
-              <CssBaseline />
-              {/* <UserContext.Provider value={value}> */}
-              <Layout>
-                <RoutesHolder />
-              </Layout>
-              {/* </UserContext.Provider> */}
-            </ThemeProvider>
-          </TitleProvider>
-        </CartProvider>
-      </UserProvider>
+      <NotifyProvider>
+        <UserProvider>
+          <CartProvider>
+            <TitleProvider>
+              <ThemeProvider>
+                <CssBaseline />
+                {/* <UserContext.Provider value={value}> */}
+                <Layout>
+                  <RoutesHolder />
+                </Layout>
+                {/* </UserContext.Provider> */}
+              </ThemeProvider>
+            </TitleProvider>
+          </CartProvider>
+        </UserProvider>
+      </NotifyProvider>
     </div>
   );
 }

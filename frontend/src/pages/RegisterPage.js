@@ -1,20 +1,18 @@
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
-  Box,
   Avatar,
-  Typography,
-  Grid,
-  TextField,
-  FormControlLabel,
+  Box,
   Button,
+  Grid,
   Link,
-  Checkbox,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { titleActions, useTitleDispatch } from 'context/title';
 import { useEffect, useState } from 'react';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link as RouterLink } from 'react-router-dom';
 
-function Register() {
+function RegisterPage() {
   const titleDispatch = useTitleDispatch();
 
   const [form, setForm] = useState({
@@ -121,4 +119,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default RegisterPage;

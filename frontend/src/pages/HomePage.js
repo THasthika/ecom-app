@@ -45,7 +45,7 @@ const useProductsQueryApi = () => {
   return [{ data, isLoading, isError, filters, maxPages }, { setFilters }];
 };
 
-const Home = () => {
+const HomePage = () => {
   const dispatch = useTitleDispatch();
 
   useEffect(() => {
@@ -130,4 +130,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

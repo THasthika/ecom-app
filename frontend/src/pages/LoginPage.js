@@ -1,22 +1,20 @@
-import {
-  Box,
-  Avatar,
-  Typography,
-  Grid,
-  TextField,
-  FormControlLabel,
-  Button,
-  Link,
-  Checkbox,
-} from '@mui/material';
-import { titleActions, useTitleDispatch } from 'context/title';
-import { useUser, useUserDispatch, userActions } from 'context/user';
-import { useEffect, useState } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link as RouterLink } from 'react-router-dom';
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { login } from 'api/user';
+import { titleActions, useTitleDispatch } from 'context/title';
+import { userActions, useUserDispatch } from 'context/user';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-function Login() {
+function LoginPage() {
   const titleDispatch = useTitleDispatch();
 
   const userDispatch = useUserDispatch();
@@ -119,4 +117,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

@@ -1,8 +1,8 @@
+import AddIcon from '@mui/icons-material/Add';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import RemoveIcon from '@mui/icons-material/Remove';
 import {
   Box,
-  Button,
-  ButtonGroup,
-  Grid,
   Card,
   CardContent,
   CardMedia,
@@ -10,16 +10,13 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
+import { getProductImageUrl } from 'api/products';
+import { cartActions, useCart, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
 import React, { useEffect, useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { formatPrice } from 'utils';
-import { cartActions, useCart, useCartDispatch } from 'context/cart';
-import { getProductImageUrl } from 'api/products';
 
-function Cart() {
+function CartPage() {
   const titleDispatch = useTitleDispatch();
 
   const cart = useCart();
@@ -143,4 +140,4 @@ function Cart() {
   );
 }
 
-export default Cart;
+export default CartPage;
