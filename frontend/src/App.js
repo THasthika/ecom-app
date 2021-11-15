@@ -14,6 +14,9 @@ import Layout from './Layout';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import { Button } from '@mui/material';
+import CheckoutPage from 'pages/CheckoutPage';
+import ProfilePage from 'pages/ProfilePage';
+import OrderHistoryPage from 'pages/OrderHistoryPage';
 
 function RoutesHolder() {
   const user = useUser();
@@ -22,7 +25,13 @@ function RoutesHolder() {
     <Routes>
       <Route path="/" element={<HomePage />}></Route>
       <Route path="/cart" element={<CartPage />}></Route>
-      {!user && (
+      {!!user ? (
+        <>
+          <Route path="/checkout" element={<CheckoutPage />}></Route>
+          <Route path="/profile" element={<ProfilePage />}></Route>
+          <Route path="/order-history" element={<OrderHistoryPage />}></Route>
+        </>
+      ) : (
         <>
           <Route path="/register" element={<RegisterPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
