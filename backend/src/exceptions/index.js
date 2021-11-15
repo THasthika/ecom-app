@@ -29,10 +29,24 @@ class ConflictException extends HttpException {
   }
 }
 
+class UnauthroizedException extends HttpException {
+  constructor(message = 'Unauthroized') {
+    super(401, message);
+  }
+}
+
+class ForbiddenException extends HttpException {
+  constructor(message = 'Forbidden') {
+    super(403, message);
+  }
+}
+
 module.exports = {
   HttpException,
   NotFoundException,
   InternalServerException,
   BadRequestException,
   ConflictException,
+  UnauthroizedException,
+  ForbiddenException,
 };

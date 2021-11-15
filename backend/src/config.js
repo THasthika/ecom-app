@@ -6,11 +6,11 @@ const config = {
   APP_IMAGE_DIR: process.env.APP_IMAGE_DIR || 'data/images',
   APP_ROOT: dirname(__dirname),
 
-  MEM_HOST: process.env.MEM_HOST,
-  MEM_PORT: process.env.MEM_PORT,
+  MEM_HOST: process.env.MEM_HOST || 'localhost',
+  MEM_PORT: parseInt(process.env.MEM_PORT, 10) || 6379,
 
   DB_HOST: process.env.DB_HOST || 'localhost',
-  DB_PORT: process.env.DB_PORT || 5432,
+  DB_PORT: parseInt(process.env.DB_PORT, 10) || 5432,
   DB_USER: process.env.DB_USER || 'ecomuser',
   DB_PASS: process.env.DB_PASS || 'ecompass',
   DB_NAME: process.env.DB_NAME || 'ecom',

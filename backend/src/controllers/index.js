@@ -1,6 +1,7 @@
 const express = require('express');
 const makeProductsController = require('./products.controller');
 const makeUsersController = require('./users.controller');
+const makeAuthController = require('./auth.controller');
 
 function makeControllers(services) {
   const router = express.Router();
@@ -14,6 +15,11 @@ function makeControllers(services) {
     usersService: services.usersService,
   });
   router.use('/users', usersController);
+
+  const authController = makeAuthController({
+    authService: services.authService,
+  });
+  router.use('/auth', authController);
 
   return router;
 }

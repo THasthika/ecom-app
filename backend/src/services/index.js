@@ -1,14 +1,20 @@
 const makeProductsService = require('./products.service');
 const makeUsersService = require('./users.service');
+const makeAuthService = require('./auth.service');
 const {
   moveFile,
   removeFile,
   randomAlphabeticString,
   getFileExtension,
   joinPath,
+} = require('../utils');
+
+const {
   hashPassword,
   comparePassword,
-} = require('../utils');
+  createAccessToken,
+  checkAccessToken,
+} = require('../utils/auth');
 
 function makeServices() {
   const productsService = makeProductsService({
@@ -24,9 +30,16 @@ function makeServices() {
     comparePassword,
   });
 
+  const authService = makeAuthService({
+    comparePassword,
+    checkAccessToken,
+    createAccessToken,
+  });
+
   return {
     productsService,
     usersService,
+    authService,
   };
 }
 
