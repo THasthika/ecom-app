@@ -1,6 +1,6 @@
-import { Box, Button, Divider, Pagination, Typography } from '@mui/material';
-import { useCartDispatch, cartActions } from 'context/cart';
-import { useTitleDispatch, titleActions } from 'context/title';
+import { Box, Divider, Pagination, Typography } from '@mui/material';
+import { cartActions, useCartDispatch } from 'context/cart';
+import { titleActions, useTitleDispatch } from 'context/title';
 import React, { useEffect, useState } from 'react';
 import { queryProducts } from '../api/products';
 import ProductGrid from '../components/ProductGrid';
