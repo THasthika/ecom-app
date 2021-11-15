@@ -113,8 +113,14 @@ function makeProductsService({
       const qObj = {
         [Op.iLike]: `%${dto.q}%`,
       };
-      where.title = qObj;
-      where.description = qObj;
+      where[Op.or] = [
+        {
+          title: qObj,
+        },
+        {
+          description: qObj,
+        },
+      ];
     }
 
     const wherePrice = {};
