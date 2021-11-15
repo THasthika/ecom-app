@@ -17,6 +17,7 @@ import { Button } from '@mui/material';
 import CheckoutPage from 'pages/CheckoutPage';
 import ProfilePage from 'pages/ProfilePage';
 import OrderHistoryPage from 'pages/OrderHistoryPage';
+import ProductPage from 'pages/ProductPage';
 
 function RoutesHolder() {
   const user = useUser();
@@ -25,6 +26,7 @@ function RoutesHolder() {
     <Routes>
       <Route path="/" element={<HomePage />}></Route>
       <Route path="/cart" element={<CartPage />}></Route>
+      <Route path="/products/:id" element={<ProductPage />}></Route>
       {!!user ? (
         <>
           <Route path="/checkout" element={<CheckoutPage />}></Route>

@@ -11,16 +11,18 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { getProductImageUrl } from 'api/products';
+import { getProductImageUrl, productPlaceholder } from 'api/products';
 import { cartActions, useCart, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
 import { useUser } from 'context/user';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { formatPrice } from 'utils';
 
 function CartPage() {
   const titleDispatch = useTitleDispatch();
+  const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -62,92 +64,100 @@ function CartPage() {
       enqueueSnackbar('must be logged in', { variant: 'warning' });
       return;
     }
+    navigate('/checkout');
   }
 
   return (
     <div>
-      <Typography variant="h5" sx={{ mt: 2 }}>
+      <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
         Items
       </Typography>
       <Divider sx={{ mb: 2 }} />
-      {cart.items.map((cartItem) => (
-        <Card sx={{ display: 'flex', mb: 2 }} key={cartItem.id}>
-          {cartItem.images.length > 0 && (
+      {cart.items.map((cartItem) => {
+        const productImage =
+          cartItem.images.length > 0
+            ? getProductImageUrl(cartItem.images[0])
+            : productPlaceholder;
+        return (
+          <Card sx={{ display: 'flex', mb: 2 }} key={cartItem.id}>
             <CardMedia
               component="img"
               sx={{ maxWidth: 250 }}
-              image={getProductImageUrl(cartItem.images[0])}
+              image={productImage}
               alt={cartItem.title}
             />
-          )}
-          <Box sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}>
-            <CardContent sx={{ flex: '1 0 auto' }}>
-              <Typography component="div" variant="h5">
-                {cartItem.title}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="text.secondary"
-                component="div"
-              >
-                {cartItem.description}
-              </Typography>
-            </CardContent>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'right',
-            }}
-          >
-            <CardContent
+            <Box sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}>
+              <CardContent sx={{ flex: '1 0 auto' }}>
+                <Typography component="div" variant="h6">
+                  {cartItem.title}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  color="text.secondary"
+                  component="div"
+                >
+                  {cartItem.description}
+                </Typography>
+              </CardContent>
+            </Box>
+            <Box
               sx={{
+                display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'right',
-                justifyItems: 'right',
-                textAlign: 'right',
-                mr: 0,
-                pr: 0,
               }}
             >
-              <Box
+              <CardContent
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
                   justifyContent: 'right',
+                  justifyItems: 'right',
+                  textAlign: 'right',
+                  pr: 0,
+                  mr: 2,
                 }}
               >
-                <IconButton onClick={() => handleOnDeleteItem(cartItem)}>
-                  <DeleteForeverIcon></DeleteForeverIcon>
-                </IconButton>
-              </Box>
-              <Box>
-                <Typography variant="h6" sx={{ mr: 2 }}>
-                  Subtotal: {formatPrice(cartItem.price * cartItem.amount)}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'right',
-                }}
-              >
-                <IconButton onClick={() => handleOnDecrementAmount(cartItem)}>
-                  <RemoveIcon></RemoveIcon>
-                </IconButton>
-                <Typography variant="h6">Qty {cartItem.amount}</Typography>
-                <IconButton onClick={() => handleOnIncrementAmount(cartItem)}>
-                  <AddIcon></AddIcon>
-                </IconButton>
-              </Box>
-            </CardContent>
-          </Box>
-        </Card>
-      ))}
-      <Typography variant="h6" sx={{ mt: 2, textAlign: 'right' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'right',
+                  }}
+                >
+                  <IconButton onClick={() => handleOnDeleteItem(cartItem)}>
+                    <DeleteForeverIcon></DeleteForeverIcon>
+                  </IconButton>
+                </Box>
+                <Box>
+                  <Typography variant="body2" fontWeight="bold">
+                    {formatPrice(cartItem.price * cartItem.amount)}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'right',
+                  }}
+                >
+                  <IconButton onClick={() => handleOnDecrementAmount(cartItem)}>
+                    <RemoveIcon></RemoveIcon>
+                  </IconButton>
+                  <Typography variant="body2">x{cartItem.amount}</Typography>
+                  <IconButton onClick={() => handleOnIncrementAmount(cartItem)}>
+                    <AddIcon></AddIcon>
+                  </IconButton>
+                </Box>
+              </CardContent>
+            </Box>
+          </Card>
+        );
+      })}
+      <Typography
+        variant="subtitle1"
+        sx={{ mt: 2, textAlign: 'right', fontWeight: 700 }}
+      >
         Total: {formatPrice(total)}
       </Typography>
       <Box sx={{ mt: 2, textAlign: 'right' }}>

@@ -1,10 +1,11 @@
 import { apiHost, handleApiError } from './utils';
 import axios from 'axios';
 
+const loginUrl = `${apiHost}/auth/login`;
+
 export async function login({ email, password }) {
-  const url = `${apiHost}/auth/login`;
   try {
-    const response = await axios(url, {
+    const response = await axios(loginUrl, {
       method: 'POST',
       data: {
         email,

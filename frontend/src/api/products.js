@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { apiHost } from './utils';
+import { apiHost, handleApiError } from './utils';
 
-export async function queryProducts(params, page, perPage) {
+export async function queryProducts({ params, page, perPage }) {
   const limit = perPage;
   const offset = (page - 1) * perPage;
   const p = {
@@ -31,10 +31,44 @@ export async function queryProducts(params, page, perPage) {
 
     return { products: data.products, totalProducts: data.totalCount };
   } catch (err) {
-    throw err;
+    handleApiError(err);
+  }
+}
+
+export async function getProductById({ id }) {
+  const url = `${apiHost}/products/${id}`;
+
+  try {
+    const response = await axios(url, {
+      method: 'GET',
+    });
+
+    const data = response.data.data;
+
+    return { product: data };
+  } catch (err) {
+    handleApiError(err);
+  }
+}
+
+export async function getProductImages({ id }) {
+  const url = `${apiHost}/products/${id}/images`;
+
+  try {
+    const response = await axios(url, {
+      method: 'GET',
+    });
+
+    const data = response.data.data;
+
+    return { images: data };
+  } catch (err) {
+    handleApiError(err);
   }
 }
 
 export function getProductImageUrl(productImage) {
   return `${apiHost}/products/${productImage.productId}/images/${productImage.name}`;
 }
+
+export const productPlaceholder = `${apiHost}/placeholders/product`;

@@ -1,11 +1,11 @@
 import { apiHost, handleApiError } from 'api/utils';
 import axios from 'axios';
 
-export async function register({ name, email, password }) {
-  const url = `${apiHost}/users`;
+const registerUserUrl = `${apiHost}/users`;
 
+export async function register({ name, email, password }) {
   try {
-    return await axios(url, {
+    return await axios(registerUserUrl, {
       method: 'POST',
       data: {
         name,

@@ -1,7 +1,10 @@
 export function formatPrice(price) {
-  return `LKR ${price}`;
+  return `LKR ${(Math.floor(price * 100) / 100).toFixed(2)}`;
 }
 
 export function formatQuantity(quantity) {
-  return `Qty. ${quantity}`;
+  if (quantity === 0) {
+    return 'Out of Stock';
+  }
+  return `Stock: ${quantity}`;
 }

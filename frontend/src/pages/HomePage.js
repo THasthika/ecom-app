@@ -1,6 +1,7 @@
 import { Box, Divider, Pagination, Typography } from '@mui/material';
 import { cartActions, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
+import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 import ProductGrid from '../components/ProductGrid';
@@ -23,11 +24,11 @@ const useProductsQueryApi = () => {
       setIsError(false);
       setIsLoading(true);
       try {
-        const results = await api.products.queryProducts(
-          filters.query,
-          filters.page,
-          perPage,
-        );
+        const results = await api.products.queryProducts({
+          params: filters.query,
+          page: filters.page,
+          perPage: perPage,
+        });
         const products = results.products;
         const totalProducts = results.totalProducts;
         // const { products, totalProducts } = getDataFromAPI();
@@ -47,6 +48,8 @@ const useProductsQueryApi = () => {
 
 const HomePage = () => {
   const dispatch = useTitleDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     titleActions.setTitle(dispatch, {
@@ -82,6 +85,7 @@ const HomePage = () => {
 
   function handleAddToCart(product) {
     cartActions.addItem(cartDispatch, { ...product });
+    enqueueSnackbar(`${product.title} added to cart`, { variant: 'info' });
   }
 
   return (
