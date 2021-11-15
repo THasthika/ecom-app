@@ -7,7 +7,8 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { useCart, useCartDispatch } from 'context/cart';
+import api from '../api';
+import { cartActions, useCart, useCartDispatch } from 'context/cart';
 import { titleActions, useTitleDispatch } from 'context/title';
 import { useUser } from 'context/user';
 import { useSnackbar } from 'notistack';
@@ -41,7 +42,21 @@ function CheckoutPage() {
     setTotal(t);
   }, [cart, setTotal]);
 
-  function handleOnOrder() {}
+  async function handleOnOrder() {
+    const products = cart.items.map((v) => {
+      return { id: v.id, amount: v.amount };
+    });
+    try {
+      await api.orders.createOrder({
+        token: user.token,
+        products,
+      });
+      cartActions.clearCart(cartDispatch);
+      enqueueSnackbar('Order Placed!');
+    } catch (err) {
+      enqueueSnackbar(err);
+    }
+  }
 
   return (
     <Box sx={{ mt: 2 }}>
@@ -91,77 +106,3 @@ function CheckoutPage() {
 }
 
 export default CheckoutPage;
-
-// return (
-//   <div>
-//     <Typography variant="h5" sx={{ mt: 2 }}>
-//       Items
-//     </Typography>
-//     <Divider sx={{ mb: 2 }} />
-//     {cart.items.map((cartItem) => (
-//       <Card sx={{ display: 'flex', mb: 2 }} key={cartItem.id}>
-//         {cartItem.images.length > 0 && (
-//           <CardMedia
-//             component="img"
-//             sx={{ maxWidth: 250 }}
-//             image={getProductImageUrl(cartItem.images[0])}
-//             alt={cartItem.title}
-//           />
-//         )}
-//         <Box sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}>
-//           <CardContent sx={{ flex: '1 0 auto' }}>
-//             <Typography component="div" variant="h5">
-//               {cartItem.title}
-//             </Typography>
-//             <Typography
-//               variant="subtitle1"
-//               color="text.secondary"
-//               component="div"
-//             >
-//               {cartItem.description}
-//             </Typography>
-//           </CardContent>
-//         </Box>
-//         <Box
-//           sx={{
-//             display: 'flex',
-//             flexDirection: 'column',
-//             justifyContent: 'right',
-//           }}
-//         >
-//           <CardContent
-//             sx={{
-//               justifyContent: 'right',
-//               justifyItems: 'right',
-//               textAlign: 'right',
-//               mr: 0,
-//               pr: 0,
-//             }}
-//           >
-//             <Box
-//               sx={{
-//                 display: 'flex',
-//                 flexDirection: 'row',
-//                 alignItems: 'center',
-//                 justifyContent: 'right',
-//               }}
-//             ></Box>
-//             <Box>
-//               <Typography variant="h6" sx={{ mr: 2 }}>
-//                 Subtotal: {formatPrice(cartItem.price * cartItem.amount)}
-//               </Typography>
-//             </Box>
-//           </CardContent>
-//         </Box>
-//       </Card>
-//     ))}
-//     <Typography variant="h6" sx={{ mt: 2, textAlign: 'right' }}>
-//       Total: {formatPrice(total)}
-//     </Typography>
-//     <Box sx={{ mt: 2, textAlign: 'right' }}>
-//       <Button variant="contained" color="primary" onClick={handleOnCheckout}>
-//         Checkout
-//       </Button>
-//     </Box>
-//   </div>
-// );
