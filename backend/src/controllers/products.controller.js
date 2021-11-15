@@ -139,7 +139,7 @@ function makeProductsController({ productsService }) {
         req.params.id,
         req.params.name,
       );
-      return new Promise((resolve, reject) => {
+      return await new Promise((resolve, reject) => {
         res.sendFile(imagePath, (err) => {
           if (err) {
             return reject(err);
