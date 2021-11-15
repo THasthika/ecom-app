@@ -1,6 +1,8 @@
 const fs = require('fs-extra');
 const randomstring = require('randomstring');
 const path = require('path');
+const config = require('../config');
+const bcrypt = require('bcrypt');
 
 function jsonResponse(status, data, message) {
   return {
@@ -50,6 +52,14 @@ function joinPath(...paths) {
   return path.join(...paths);
 }
 
+function hashPassword(password) {
+  return bcrypt.hashSync(password, config.APP_SALT_ROUNDS);
+}
+
+function comparePassword(hash, password) {
+  return bcrypt.compareSync(password, hash);
+}
+
 module.exports = {
   controllerWrapper,
   jsonResponse,
@@ -58,4 +68,6 @@ module.exports = {
   randomAlphabeticString,
   getFileExtension,
   joinPath,
+  hashPassword,
+  comparePassword,
 };

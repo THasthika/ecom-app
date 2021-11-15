@@ -21,6 +21,12 @@ module.exports = {
       },
     ]);
 
+    // await queryInterface.bulkInsert('Users', [
+    //   {
+    //     user
+    //   }
+    // ]);
+
     /**
      * Add seed commands here.
      *

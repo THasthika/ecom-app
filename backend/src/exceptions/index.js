@@ -23,9 +23,16 @@ class BadRequestException extends HttpException {
   }
 }
 
+class ConflictException extends HttpException {
+  constructor(message = 'Conflict') {
+    super(409, message);
+  }
+}
+
 module.exports = {
   HttpException,
   NotFoundException,
   InternalServerException,
   BadRequestException,
+  ConflictException,
 };

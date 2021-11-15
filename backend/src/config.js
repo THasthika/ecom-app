@@ -2,7 +2,7 @@ const { dirname } = require('path');
 
 const config = {
   APP_SECRET: process.env.APP_SECRET || 'super-secret',
-  APP_SALT_ROUNDS: process.env.APP_SALT_ROUNDS || 10,
+  APP_SALT_ROUNDS: parseInt(process.env.APP_SALT_ROUNDS, 10) || 10,
   APP_IMAGE_DIR: process.env.APP_IMAGE_DIR || 'data/images',
   APP_ROOT: dirname(__dirname),
 

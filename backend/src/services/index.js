@@ -1,10 +1,13 @@
 const makeProductsService = require('./products.service');
+const makeUsersService = require('./users.service');
 const {
   moveFile,
   removeFile,
   randomAlphabeticString,
   getFileExtension,
   joinPath,
+  hashPassword,
+  comparePassword,
 } = require('../utils');
 
 function makeServices() {
@@ -16,8 +19,14 @@ function makeServices() {
     joinPath,
   });
 
+  const usersService = makeUsersService({
+    hashPassword,
+    comparePassword,
+  });
+
   return {
     productsService,
+    usersService,
   };
 }
 
