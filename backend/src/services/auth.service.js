@@ -19,10 +19,12 @@ function makeAuthService({
       throw new InvalidCredentialsException();
     }
 
-    const token = await createAccessToken(user.id);
+    const token = await createAccessToken(user.id, {});
 
     return {
       token,
+      name: user.name,
+      email: user.email,
     };
   }
 
