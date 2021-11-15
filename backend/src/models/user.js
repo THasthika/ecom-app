@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
   });
 
-  User.associate = (models) => {};
+  User.associate = (models) => {
+    User.hasMany(models.Order, {
+      foreignKey: 'userId',
+      as: 'orders',
+    });
+  };
 
   return User;
 };

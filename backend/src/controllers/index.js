@@ -3,6 +3,7 @@ const makeProductsController = require('./products.controller');
 const makeUsersController = require('./users.controller');
 const makeAuthController = require('./auth.controller');
 const makePlaceholdersController = require('./placeholders.controller');
+const makeOrdersController = require('./orders.controller');
 
 function makeControllers(services) {
   const router = express.Router();
@@ -24,6 +25,11 @@ function makeControllers(services) {
 
   const placeholdersController = makePlaceholdersController({});
   router.use('/placeholders', placeholdersController);
+
+  const ordersController = makeOrdersController({
+    ordersService: services.ordersService,
+  });
+  router.use('/orders', ordersController);
 
   return router;
 }

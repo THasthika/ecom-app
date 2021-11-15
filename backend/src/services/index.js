@@ -1,6 +1,7 @@
 const makeProductsService = require('./products.service');
 const makeUsersService = require('./users.service');
 const makeAuthService = require('./auth.service');
+const makeOrdersService = require('./orders.service');
 const {
   moveFile,
   removeFile,
@@ -36,10 +37,13 @@ function makeServices() {
     createAccessToken,
   });
 
+  const ordersService = makeOrdersService({});
+
   return {
     productsService,
     usersService,
     authService,
+    ordersService,
   };
 }
 
