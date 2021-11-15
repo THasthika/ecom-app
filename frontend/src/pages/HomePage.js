@@ -96,7 +96,7 @@ const HomePage = () => {
       <Divider />
       <Box pt={2} pb={2}>
         <ProductSearchForm
-          query={searchState.q}
+          q={searchState.q}
           minPrice={searchState.minPrice}
           maxPrice={searchState.maxPrice}
           minQuantity={searchState.minQuantity}

@@ -17,7 +17,7 @@ import {
 import React, { useState } from 'react';
 
 const ProductSearchForm = ({
-  query,
+  q,
   minPrice,
   maxPrice,
   minQuantity,
@@ -44,9 +44,9 @@ const ProductSearchForm = ({
             label="Search"
             variant="outlined"
             fullWidth
-            value={query}
+            value={q}
             onChange={(e) => {
-              updateValue('query', e.target.value);
+              updateValue('q', e.target.value);
             }}
           />
           <Collapse in={expanded} timeout="auto" unmountOnExit>
